@@ -877,7 +877,7 @@ function volverAlPlanoDesdeCreditos() {
 }
 
 function compartirExperiencia() {
-    const url = URL_PUBLICADA_GITHUB !== "" ? URL_PUBLICADA_GITHUB : window.location.href;
+    const url = URL_PUBLICADA_GITHUB !== "https://agiraldoceron.github.io/los-abogados/" ? URL_PUBLICADA_GITHUB : window.location.href;
     const msg = document.getElementById("mensaje-copiado");
 
     if (navigator.clipboard && navigator.clipboard.writeText) {
