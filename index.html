@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>Los abogados — Observaciones del aseo</title>
+    <!-- Google Fonts: Anton (Títulos), Roboto Mono (Cuerpo técnico), Alegreya Sans (Subtítulos y Botones) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;1,400&family=Anton&family=Roboto+Mono:ital,wght@0,300;0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="ambiente-planta1">
+
+    <!-- =====================================================================
+         ELEMENTOS DE AUDIO (1 INTRO + 2 REPRODUCTORES DINÁMICOS DE PLAYLIST)
+         ===================================================================== -->
+    <audio id="audio-intro" src="audio/musica-intro.mp3" loop preload="auto"></audio>
+    <audio id="audio-planta1" preload="auto"></audio>
+    <audio id="audio-planta2" preload="auto"></audio>
+
+    <!-- =====================================================================
+         1. CONTENEDOR DE INTRODUCCIÓN (VIDEO DE FONDO + PANTALLAS 1 Y 2)
+         ===================================================================== -->
+    <section id="intro-wrapper">
+        <video id="video-fondo" autoplay muted loop playsinline poster="">
+            <source src="media/intro.mp4" type="video/mp4">
+        </video>
+        <div class="velo-video"></div>
+
+        <!-- Líneas de encuadre arquitectónico de portada (Estética plano real, no caja IA) -->
+        <div class="lineas-portada-arquitectura">
+            <span class="cota-portada sup-izq">LEVANTAMIENTO // ESC. 1:100</span>
+            <span class="cota-portada sup-der">PAÍSES BAJOS — TURNO NOCTURNO</span>
+            <span class="cota-portada inf-izq">REF. ARCHIVO: EXP-ASEO</span>
+        </div>
+
+        <!-- PANTALLA 1: PORTADA EDITORIAL Y ARQUITECTÓNICA -->
+        <div id="pantalla-1" class="pantalla-intro activa">
+            <div class="portada-editorial">
+                <div class="portada-bloque-titulo">
+                    <div class="aviso-sonido-portada">
+                        <span>🔊 Esta experiencia tiene música. Prende tu sonido 😉</span>
+                    </div>
+                    <h1 class="titulo-portada">LOS ABOGADOS</h1>
+                    <div class="barra-subtitulo-portada">
+                        <span class="linea-tecnica-portada"></span>
+                        <h2 class="subtitulo-portada">Observaciones del aseo</h2>
+                    </div>
+                </div>
+
+                <div class="portada-bloque-accion">
+                    <button class="btn-cta btn-portada" onclick="irAPantalla2()">
+                        Ingresar al buffet <span class="flecha-btn">→</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- PANTALLA 2: CONTEXTO E INSTRUCCIONES DE TURNO -->
+        <div id="pantalla-2" class="pantalla-intro">
+            <div class="caja-contexto">
+                <!-- Navegación superior de pantalla inicial -->
+                <div class="nav-pantallas-intro">
+                    <button class="btn-volver-intro" onclick="volverAPantalla1()">← Volver a la portada</button>
+                    <span class="aviso-sonido-mini">🔊 Esta experiencia tiene música. Prende tu sonido 😉</span>
+                </div>
+
+                <!-- Título INSTRUCCIONES DE TURNO destacado -->
+                <div class="cabecera-contexto-destacada">
+                    <h2 class="titulo-instrucciones">INSTRUCCIONES DE TURNO</h2>
+                    <span class="tag-tiempo-limite">TIEMPO LÍMITE: 02:00 HRS</span>
+                </div>
+
+                <div class="scroll-contexto">
+                    <p>Trabajas como aseador(a) en un buffet de abogados. Tu turno empieza cuando el de ellos termina. <span class="frase-destacada">Debes limpiar todas las oficinas</span>. No sabes quiénes son, qué les gusta, cómo son sus vidas, quién es respetado y a quién se mira con desdén, pero lo intuyes a través de sus objetos, de esos mundos que se crean en los reductos de la cotidianidad laboral que no presencias. Sí, tu labor es levantar el polvo, aspirar alfombras, recoger la basura, retirar las telarañas, pero no puedes evitar la curiosidad, proyectar sus cuerpos en los muebles tan prestos a recibirlos. <span class="frase-destacada">Piensas en ellos como personajes de una obra</span> que sucede en ese otro idioma, incomprensible para ti. Tienes claro que tus ficciones son solo eso, mecanismos contra el aburrimiento, pero no dudas de que alguna verdad albergan.</p>
+                    <p>El buffet es gigante. De donde vienes, esta labor le correspondería a una multitud de aseadores(as). Acá, eres solo tú. Pronto entiendes que se trata más de que parezca limpio, de que lo esté. <span class="frase-destacada">Tienes dos horas para terminar</span>. Si te pasas, es tu rollo; en cualquier caso, solo te pagan dos horas. Punto. Para realizar el cobro, <span class="frase-destacada">debes recoger 5 cromos</span>, y obtienes un cromo luego de limpiar varias zonas.</p>
+                    <p class="pregunta-contexto">¿Estás listo(a)?</p>
+                </div>
+
+                <div class="pie-acciones-intro">
+                    <button class="btn-secundario" onclick="volverAPantalla1()">← Anterior</button>
+                    <button class="btn-cta" onclick="empezarTurno()">Empezar turno →</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- =====================================================================
+         2. INTERFAZ PRINCIPAL (BARRA MÓVIL + MENÚ LATERAL + PLANO)
+         ===================================================================== -->
+    <div id="experiencia-layout" style="display: none;">
+
+        <!-- Barra superior compacta y proporcionada para móviles -->
+        <header id="barra-movil">
+            <button class="btn-menu-movil" onclick="toggleMenuLateral()">
+                ☰ Registro de turno
+            </button>
+            <div class="reloj-movil-mini" id="reloj-mini">00:00 / 02:00</div>
+            <div class="cromos-movil-mini" id="cromos-mini">Cromos: 0/5</div>
+        </header>
+
+        <!-- MENÚ LATERAL DE REGISTRO DE AVANCE -->
+        <aside id="menu-lateral">
+            <div class="menu-cabecera">
+                <div>
+                    <span class="menu-etiqueta">HOJA DE CONTROL</span>
+                    <h3 class="menu-titulo">BITÁCORA DE ASEO</h3>
+                </div>
+                <button class="btn-cerrar-menu" onclick="toggleMenuLateral()">×</button>
+            </div>
+
+            <!-- A) Reloj acelerado del turno -->
+            <div class="bloque-menu">
+                <div class="bloque-header">
+                    <span>TIEMPO EN EL BUFFET</span>
+                    <span id="estado-tarifa" class="badge-tarifa">TARIFA ACTIVA</span>
+                </div>
+                <div class="reloj-principal" id="reloj-turno">00:00:00</div>
+                <div class="subtexto-reloj">Límite remunerado: 02:00:00 hrs</div>
+                <div class="barra-tiempo-fondo">
+                    <div class="barra-tiempo-progreso" id="barra-tiempo"></div>
+                </div>
+            </div>
+
+            <!-- B) Conteo de espacios limpiados y pendientes -->
+            <div class="bloque-menu">
+                <div class="bloque-header">
+                    <span>PROGRESO DE ZONAS</span>
+                </div>
+                <div class="grilla-estadisticas">
+                    <div class="stat-caja">
+                        <span class="stat-num" id="num-limpios">0</span>
+                        <span class="stat-label">LIMPIOS</span>
+                    </div>
+                    <div class="stat-caja">
+                        <span class="stat-num" id="num-pendientes">20</span>
+                        <span class="stat-label">PENDIENTES</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- C) Colección de los 5 Cromos -->
+            <div class="bloque-menu">
+                <div class="bloque-header">
+                    <span>COLECCIÓN DE CROMOS</span>
+                    <span id="contador-cromos">0 / 5</span>
+                </div>
+                <p class="ayuda-cromos">Al salir de cada oficina o marcar su casilla se registra como limpia.</p>
+                <div class="grilla-cromos" id="contenedor-cromos"></div>
+            </div>
+
+            <!-- D) Selector de Planta, Música y Reiniciar Turno -->
+            <div class="bloque-menu">
+                <div class="bloque-header">
+                    <span>NAVEGACIÓN Y SONIDO</span>
+                </div>
+                <div class="botones-planta-menu">
+                    <button class="btn-planta activo" id="btn-pb" onclick="cambiarPlanta('pb')">PLANTA 01 [BAJA]</button>
+                    <button class="btn-planta" id="btn-pa" onclick="cambiarPlanta('pa')">PLANTA 02 [ALTA]</button>
+                </div>
+                <button class="btn-musica" id="btn-toggle-musica" onclick="toggleMusica()">
+                    🔊 MÚSICA: ENCENDIDA
+                </button>
+                <div id="info-pista-actual" class="subtexto-pista">Pista activa: Planta 1</div>
+            </div>
+
+            <!-- E) Pulso de la noche + Botón Reiniciar Turno -->
+            <div class="bloque-menu bloque-bitacora">
+                <div class="bloque-header">
+                    <span>PULSO DE LA NOCHE</span>
+                </div>
+                <p id="nota-bitacora" class="texto-bitacora">
+                    "El edificio acaba de quedar vacío. Las cafeteras aún están tibias."
+                </p>
+                <button id="btn-abrir-reflexion" class="btn-cta btn-reflexion-menu" style="display: none;" onclick="abrirModalReflexionFinal()">
+                    Ver reflexión final y cobrar
+                </button>
+                <button class="btn-reiniciar-turno" onclick="reiniciarTurnoCompleto()">
+                    ↺ Reiniciar turno
+                </button>
+            </div>
+        </aside>
+
+        <!-- ÁREA PRINCIPAL DEL PLANO ARQUITECTÓNICO -->
+        <main id="contenedor-plano">
+            
+            <div class="barra-planta-flotante">
+                <div class="indicador-planta-actual">
+                    <span class="punto-luz"></span>
+                    <span id="texto-planta-activa">PLANTA 01 — NIVEL DE INGRESO</span>
+                </div>
+                <div class="controles-rapidos-planta">
+                    <button class="btn-chip activo" id="chip-pb" onclick="cambiarPlanta('pb')">Piso 1</button>
+                    <button class="btn-chip" id="chip-pa" onclick="cambiarPlanta('pa')">Piso 2</button>
+                </div>
+            </div>
+
+            <div class="leyenda-plano">
+                <span><i class="cuadro-leyenda pendiente"></i> Pendiente de aseo</span>
+                <span><i class="cuadro-leyenda limpio"></i> Espacio ya parece limpio ✓</span>
+            </div>
+
+            <!-- LIENZO SVG DEL PLANO CON TEXTOS ESCALADOS PARA LECTURA CLARA EN MÓVIL -->
+            <div id="mapa-wrapper">
+                <svg viewBox="0 0 900 1520" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <pattern id="trama-baldosa" width="15" height="15" patternUnits="userSpaceOnUse">
+                            <path d="M 15 0 L 0 0 0 15" fill="none" stroke="rgba(232,241,245,0.14)" stroke-width="0.7"/>
+                        </pattern>
+                    </defs>
+
+                    <rect class="trazo-fino" x="20" y="20" width="860" height="1480" />
+                    <rect class="trazo-fino" x="28" y="28" width="844" height="1464" />
+
+                    <line class="trazo-cota" x1="70" y1="80" x2="70" y2="1320" />
+                    <text class="txt-cota" x="55" y="700" transform="rotate(-90 55 700)">PROFUNDIDAD CASA NEERLANDESA: 38.50 m</text>
+                    <line class="trazo-cota" x1="110" y1="55" x2="790" y2="55" />
+                    <text class="txt-cota" x="450" y="47">FRENTE DE FACHADA: 14.20 m</text>
+
+                    <rect class="muro-ext" x="110" y="80" width="680" height="1240" />
+                    <rect class="trazo-fino" x="104" y="74" width="692" height="1252" />
+
+                    <!-- ==================== PLANTA 01: BAJA ==================== -->
+                    <g id="capa-pb">
+                        <line class="muro-int" x1="360" y1="80" x2="360" y2="1320" />
+                        <line class="muro-int" x1="540" y1="80" x2="540" y2="1320" />
+
+                        <!-- Corredor Principal -->
+                        <rect class="zona" id="zona-Corredores" x="360" y="80" width="180" height="1040" onclick="abrirEspacio('Corredores')" />
+                        <text class="txt-titulo" x="455" y="600" transform="rotate(-90 455 600)">CORREDOR PRINCIPAL</text>
+
+                        <!-- Ingreso -->
+                        <rect class="zona" id="zona-Ingreso" x="360" y="1120" width="180" height="200" onclick="abrirEspacio('Ingreso')" />
+                        <line class="hoja-puerta" x1="410" y1="1320" x2="410" y2="1280" />
+                        <path class="arco-puerta" d="M 410 1280 A 40 40 0 0 1 450 1320" />
+                        <line class="hoja-puerta" x1="490" y1="1320" x2="490" y2="1280" />
+                        <path class="arco-puerta" d="M 490 1280 A 40 40 0 0 0 450 1320" />
+                        <text class="txt-titulo" x="450" y="1225">INGRESO</text>
+                        <text class="txt-sub" x="450" y="1250">SALIDA PRINCIPAL</text>
+
+                        <!-- ALA IZQUIERDA PB -->
+                        <!-- Rick -->
+                        <line class="muro-int" x1="110" y1="1060" x2="360" y2="1060" />
+                        <rect class="mobiliario" x="145" y="1140" width="110" height="55" />
+                        <circle class="mobiliario" cx="290" cy="1240" r="28" />
+                        <line class="hoja-puerta" x1="360" y1="1180" x2="325" y2="1180" />
+                        <path class="arco-puerta" d="M 325 1180 A 35 35 0 0 1 360 1145" />
+                        <rect class="zona" id="zona-Rick" x="110" y="1060" width="250" height="260" onclick="abrirEspacio('Rick')" />
+                        <text class="txt-titulo" x="235" y="1205">RICK</text>
+                        <text class="txt-sub" x="235" y="1230">ABOGADO SOCIO</text>
+
+                        <!-- Sonia -->
+                        <line class="muro-int" x1="110" y1="950" x2="360" y2="950" />
+                        <rect class="mobiliario" x="140" y="975" width="85" height="40" />
+                        <rect class="zona" id="zona-Sonia" x="110" y="950" width="250" height="110" onclick="abrirEspacio('Sonia')" />
+                        <text class="txt-titulo" x="235" y="1002">SEC. SONIA</text>
+                        <text class="txt-sub" x="235" y="1025">SECRETARÍA</text>
+
+                        <!-- Cocina + Recepción -->
+                        <line class="muro-int" x1="110" y1="770" x2="360" y2="770" />
+                        <line class="muro-int" x1="255" y1="770" x2="255" y2="950" />
+                        <rect fill="url(#trama-baldosa)" x="112" y="772" width="141" height="176" />
+                        <rect class="mobiliario" x="112" y="772" width="35" height="176" />
+                        <rect class="zona" id="zona-Cocina" x="110" y="770" width="145" height="180" onclick="abrirEspacio('Cocina')" />
+                        <text class="txt-titulo" x="185" y="868">COCINA</text>
+
+                        <rect class="mobiliario" x="275" y="795" width="65" height="130" />
+                        <rect class="zona" id="zona-Recepcion" x="255" y="770" width="105" height="180" onclick="abrirEspacio('Recepcion')" />
+                        <text class="txt-titulo" x="312" y="860" transform="rotate(-90 312 860)">RECEPCIÓN</text>
+
+                        <!-- Sala Clientes -->
+                        <line class="muro-int" x1="110" y1="560" x2="360" y2="560" />
+                        <circle class="mobiliario" cx="165" cy="615" r="20" />
+                        <circle class="mobiliario" cx="255" cy="615" r="20" />
+                        <circle class="mobiliario" cx="210" cy="665" r="22" />
+                        <circle class="mobiliario" cx="165" cy="715" r="20" />
+                        <circle class="mobiliario" cx="265" cy="715" r="20" />
+                        <rect class="zona" id="zona-SalaClientes" x="110" y="560" width="250" height="210" onclick="abrirEspacio('SalaClientes')" />
+                        <text class="txt-titulo" x="235" y="670">SALA CLIENTES</text>
+
+                        <!-- Harold -->
+                        <line class="muro-int" x1="110" y1="330" x2="360" y2="330" />
+                        <rect class="mobiliario" x="150" y="400" width="110" height="55" />
+                        <rect class="zona" id="zona-Harold" x="110" y="330" width="250" height="230" onclick="abrirEspacio('Harold')" />
+                        <text class="txt-titulo" x="235" y="445">HAROLD</text>
+                        <text class="txt-sub" x="235" y="470">ABOGADO</text>
+
+                        <!-- Patrik -->
+                        <rect class="mobiliario" x="145" y="140" width="125" height="60" />
+                        <circle class="mobiliario" cx="290" cy="240" r="32" />
+                        <rect class="zona" id="zona-Patrik" x="110" y="80" width="250" height="250" onclick="abrirEspacio('Patrik')" />
+                        <text class="txt-titulo" x="235" y="205">PATRIK</text>
+                        <text class="txt-sub" x="235" y="230">ABOGADO SOCIO</text>
+
+                        <!-- ALA DERECHA PB -->
+                        <!-- Hulk -->
+                        <line class="muro-int" x1="540" y1="1060" x2="790" y2="1060" />
+                        <rect class="mobiliario" x="620" y="1140" width="115" height="55" />
+                        <rect class="zona" id="zona-Hulk" x="540" y="1060" width="250" height="260" onclick="abrirEspacio('Hulk')" />
+                        <text class="txt-titulo" x="665" y="1205">HULK</text>
+                        <text class="txt-sub" x="665" y="1230">ABOGADO</text>
+
+                        <!-- Sala Conferencias -->
+                        <line class="muro-int" x1="540" y1="800" x2="790" y2="800" />
+                        <rect class="mobiliario" x="615" y="845" width="100" height="170" rx="25" />
+                        <rect class="zona" id="zona-Conferencias" x="540" y="800" width="250" height="260" onclick="abrirEspacio('Conferencias')" />
+                        <text class="txt-titulo" x="665" y="925">CONFERENCIAS</text>
+                        <text class="txt-sub" x="665" y="950">SALA DE JUNTAS</text>
+
+                        <!-- Patios -->
+                        <line class="muro-int" x1="540" y1="680" x2="790" y2="680" />
+                        <line class="hoja-puerta" x1="790" y1="740" x2="745" y2="740" />
+                        <path class="arco-puerta" d="M 745 740 A 45 45 0 0 1 790 695" />
+                        <rect class="zona" id="zona-Patios" x="540" y="680" width="250" height="120" onclick="abrirEspacio('Patios')" />
+                        <text class="txt-titulo" x="665" y="748">PATIOS</text>
+
+                        <!-- Baños PB (Daños) -->
+                        <line class="muro-int" x1="540" y1="530" x2="790" y2="530" />
+                        <rect fill="url(#trama-baldosa)" x="542" y="532" width="246" height="146" />
+                        <line class="muro-int" x1="665" y1="530" x2="665" y2="680" />
+                        <ellipse class="trazo-fino" cx="600" cy="560" rx="10" ry="14" />
+                        <ellipse class="trazo-fino" cx="730" cy="560" rx="10" ry="14" />
+                        <rect class="zona" id="zona-Danos" x="540" y="530" width="250" height="150" onclick="abrirEspacio('Daños')" />
+                        <text class="txt-titulo" x="665" y="610">BAÑOS (DAÑOS)</text>
+
+                        <!-- Escalera PB -->
+                        <line class="muro-int" x1="540" y1="410" x2="790" y2="410" />
+                        <g class="trazo-fino">
+                            <line x1="560" y1="425" x2="560" y2="515" /><line x1="585" y1="425" x2="585" y2="515" />
+                            <line x1="610" y1="425" x2="610" y2="515" /><line x1="635" y1="425" x2="635" y2="515" />
+                            <line x1="660" y1="425" x2="660" y2="515" /><line x1="685" y1="425" x2="685" y2="515" />
+                            <line x1="710" y1="425" x2="710" y2="515" /><line x1="550" y1="470" x2="735" y2="470" />
+                        </g>
+                        <rect class="zona zona-escalera" x="540" y="410" width="250" height="120" onclick="cambiarPlanta('pa')" />
+                        <text class="txt-titulo" x="665" y="458">ESCALERA ↑</text>
+                        <text class="txt-sub" x="665" y="495">[SUBIR AL PISO 2]</text>
+
+                        <!-- Sophia -->
+                        <line class="muro-int" x1="540" y1="310" x2="790" y2="310" />
+                        <rect class="mobiliario" x="640" y="340" width="80" height="35" />
+                        <rect class="zona" id="zona-Sophia" x="540" y="310" width="250" height="100" onclick="abrirEspacio('Sophia')" />
+                        <text class="txt-titulo" x="665" y="360">SEC. SOPHIA</text>
+                        <text class="txt-sub" x="665" y="384">SECRETARÍA</text>
+
+                        <!-- Tom -->
+                        <rect class="mobiliario" x="620" y="130" width="130" height="60" />
+                        <circle class="mobiliario" cx="610" cy="245" r="35" />
+                        <rect class="zona" id="zona-Tom" x="540" y="80" width="250" height="230" onclick="abrirEspacio('Tom')" />
+                        <text class="txt-titulo" x="665" y="195">TOM</text>
+                        <text class="txt-sub" x="665" y="220">SOCIO PRINCIPAL</text>
+                    </g>
+
+                    <!-- ==================== PLANTA 02: ALTA ==================== -->
+                    <g id="capa-pa" style="display: none;">
+                        <line class="muro-int" x1="360" y1="80" x2="360" y2="1320" />
+                        <line class="muro-int" x1="540" y1="80" x2="540" y2="1320" />
+
+                        <rect class="zona" id="zona-Corredores3" x="360" y="80" width="180" height="1240" onclick="abrirEspacio('Corredores 3')" />
+                        <text class="txt-titulo" x="455" y="700" transform="rotate(-90 455 700)">CORREDOR PLANTA ALTA</text>
+
+                        <!-- ALA IZQUIERDA PA -->
+                        <line class="muro-int" x1="110" y1="1140" x2="360" y2="1140" />
+                        <rect class="mobiliario" x="145" y="1200" width="85" height="45" />
+                        <rect class="zona" id="zona-Julia" x="110" y="1140" width="250" height="180" onclick="abrirEspacio('Julia')" />
+                        <text class="txt-titulo" x="235" y="1228">JULIA</text>
+                        <text class="txt-sub" x="235" y="1252">ABOGADA</text>
+
+                        <line class="muro-int" x1="110" y1="960" x2="360" y2="960" />
+                        <rect class="mobiliario" x="145" y="1020" width="85" height="45" />
+                        <rect class="zona" id="zona-Helda" x="110" y="960" width="250" height="180" onclick="abrirEspacio('Helda')" />
+                        <text class="txt-titulo" x="235" y="1048">HELDA</text>
+                        <text class="txt-sub" x="235" y="1072">ABOGADA</text>
+
+                        <line class="muro-int" x1="110" y1="780" x2="360" y2="780" />
+                        <rect class="mobiliario" x="145" y="840" width="85" height="45" />
+                        <rect class="zona" id="zona-Madelein" x="110" y="780" width="250" height="180" onclick="abrirEspacio('Madelein')" />
+                        <text class="txt-titulo" x="235" y="868">MADELEIN</text>
+                        <text class="txt-sub" x="235" y="892">ABOGADA</text>
+
+                        <line class="muro-int" x1="110" y1="610" x2="360" y2="610" />
+                        <rect class="mobiliario" x="145" y="670" width="85" height="45" />
+                        <rect class="zona" id="zona-Kim" x="110" y="610" width="250" height="170" onclick="abrirEspacio('Kim')" />
+                        <text class="txt-titulo" x="235" y="692">KIM</text>
+                        <text class="txt-sub" x="235" y="716">ABOGADA</text>
+
+                        <line class="muro-int" x1="110" y1="440" x2="360" y2="440" />
+                        <rect class="mobiliario" x="145" y="500" width="85" height="45" />
+                        <rect class="zona" id="zona-Rebeka" x="110" y="440" width="250" height="170" onclick="abrirEspacio('Rebeka')" />
+                        <text class="txt-titulo" x="235" y="522">REBEKA</text>
+                        <text class="txt-sub" x="235" y="546">ABOGADA</text>
+
+                        <rect class="mobiliario" x="145" y="180" width="110" height="55" />
+                        <circle class="mobiliario" cx="285" cy="310" r="26" />
+                        <rect class="zona" id="zona-Christa" x="110" y="80" width="250" height="360" onclick="abrirEspacio('Christa')" />
+                        <text class="txt-titulo" x="235" y="255">CHRISTA</text>
+                        <text class="txt-sub" x="235" y="280">ABOGADA SENIOR</text>
+
+                        <!-- ALA DERECHA PA -->
+                        <line class="muro-int" x1="540" y1="1000" x2="790" y2="1000" />
+                        <rect class="mobiliario" x="620" y="1100" width="125" height="60" />
+                        <circle class="mobiliario" cx="620" cy="1230" r="32" />
+                        <rect class="zona" id="zona-Gustav" x="540" y="1000" width="250" height="320" onclick="abrirEspacio('Gustav')" />
+                        <text class="txt-titulo" x="665" y="1160">GUSTAV</text>
+                        <text class="txt-sub" x="665" y="1185">ABOGADO SOCIO</text>
+
+                        <line class="muro-int" x1="540" y1="880" x2="790" y2="880" />
+                        <rect class="mobiliario" x="630" y="920" width="85" height="38" />
+                        <rect class="zona" id="zona-Karol" x="540" y="880" width="250" height="120" onclick="abrirEspacio('Karol')" />
+                        <text class="txt-titulo" x="665" y="938">SEC. KAROL</text>
+                        <text class="txt-sub" x="665" y="962">SECRETARÍA</text>
+
+                        <line class="muro-int" x1="540" y1="530" x2="790" y2="530" />
+                        <rect class="mobiliario" x="575" y="600" width="75" height="45" />
+                        <rect class="mobiliario" x="665" y="600" width="75" height="45" />
+                        <rect class="mobiliario" x="575" y="740" width="75" height="45" />
+                        <rect class="mobiliario" x="665" y="740" width="75" height="45" />
+                        <rect class="zona" id="zona-Juniors" x="540" y="530" width="250" height="350" onclick="abrirEspacio('Juniors')" />
+                        <text class="txt-titulo" x="665" y="700">JUNIORS</text>
+                        <text class="txt-sub" x="665" y="725">OFICINA COMÚN</text>
+
+                        <line class="muro-int" x1="540" y1="410" x2="790" y2="410" />
+                        <g class="trazo-fino">
+                            <line x1="560" y1="425" x2="560" y2="515" /><line x1="585" y1="425" x2="585" y2="515" />
+                            <line x1="610" y1="425" x2="610" y2="515" /><line x1="635" y1="425" x2="635" y2="515" />
+                            <line x1="660" y1="425" x2="660" y2="515" /><line x1="685" y1="425" x2="685" y2="515" />
+                            <line x1="710" y1="425" x2="710" y2="515" />
+                        </g>
+                        <rect class="zona zona-escalera" x="540" y="410" width="250" height="120" onclick="cambiarPlanta('pb')" />
+                        <text class="txt-titulo" x="665" y="458">ESCALERA ↓</text>
+                        <text class="txt-sub" x="665" y="495">[BAJAR AL PISO 1]</text>
+
+                        <rect fill="url(#trama-baldosa)" x="542" y="82" width="246" height="326" />
+                        <line class="muro-int" x1="665" y1="80" x2="665" y2="410" />
+                        <ellipse class="trazo-fino" cx="600" cy="140" rx="12" ry="16" />
+                        <ellipse class="trazo-fino" cx="730" cy="140" rx="12" ry="16" />
+                        <rect class="zona" id="zona-Danos2" x="540" y="80" width="250" height="330" onclick="abrirEspacio('Daños 2')" />
+                        <text class="txt-titulo" x="665" y="245">BAÑOS (DAÑOS 2)</text>
+                        <text class="txt-sub" x="665" y="270">SEGUNDO PISO</text>
+                    </g>
+
+                    <!-- Cajetín Técnico Inferior -->
+                    <g transform="translate(110, 1355)">
+                        <rect class="muro-int" x="0" y="0" width="680" height="110" />
+                        <line class="trazo-fino" x1="380" y1="0" x2="380" y2="110" />
+                        <line class="trazo-fino" x1="540" y1="0" x2="540" y2="110" />
+                        <circle class="trazo-fino" cx="55" cy="55" r="26" />
+                        <polygon points="55,22 48,60 55,52 62,60" fill="#e8f1f5" />
+                        <text class="txt-cota" x="55" y="18">N</text>
+                        <text class="txt-titulo" x="235" y="45" style="font-size:16px;">LOS ABOGADOS — OBSERVACIONES DEL ASEO</text>
+                        <text class="txt-sub" x="235" y="70">LEVANTAMIENTO ARQUITECTÓNICO Y NARRATIVO</text>
+                        <text class="txt-cota" x="235" y="92">ESCALA 1:100 // PAÍSES BAJOS</text>
+                        <text class="txt-sub" x="460" y="38">NIVEL ACTIVO:</text>
+                        <text class="txt-titulo" id="rotulo-planta" x="460" y="70" style="font-size:18px;">PLANTA 01</text>
+                        <text class="txt-sub" x="610" y="38">PLANO NO.</text>
+                        <text class="txt-titulo" id="rotulo-numero" x="610" y="70" style="font-size:18px;">01 / 02</text>
+                    </g>
+                </svg>
+            </div>
+        </main>
+    </div>
+
+    <!-- =====================================================================
+         3. MODAL DE OFICINA (IMAGEN COMPLETA SIN RECORTE + BOTÓN TITILANTE)
+         ===================================================================== -->
+    <div id="modal-oficina" class="modal-backdrop">
+        <div class="modal-caja">
+            <button class="btn-cerrar" onclick="cerrarModalOficina()">×</button>
+
+            <!-- Izquierda: Imagen completa (vertical u horizontal) sin nombre de archivo -->
+            <div class="modal-visor">
+                <div class="marco-foto" id="contenedor-imagen"></div>
+                <div class="controles-foto" id="barra-controles-foto">
+                    <button class="btn-carrusel" id="btn-ant" onclick="cambiarFoto(-1)">◀ Anterior</button>
+                    <span id="indicador-paginacion" class="puntos-carrusel"></span>
+                    <button class="btn-carrusel" id="btn-sig" onclick="cambiarFoto(1)">Siguiente ▶</button>
+                </div>
+            </div>
+
+            <!-- Derecha: Cabecera + Cuerpo con Scroll + Casilla + Botón titilante -->
+            <div class="modal-lectura">
+                <div class="ficha-tecnica">
+                    <div class="ficha-codigo" id="modal-categoria">CATEGORÍA</div>
+                    <h2 class="ficha-titulo" id="modal-titulo">NOMBRE OFICINA</h2>
+                </div>
+
+                <div class="cuerpo-literario-scroll" id="scroll-lectura">
+                    <div id="modal-texto"></div>
+
+                    <!-- Casilla de verificación y botón titilante "Continuar la jornada" -->
+                    <div class="bloque-verificacion">
+                        <label class="label-checkbox">
+                            <input type="checkbox" id="check-limpio" onchange="marcarEspacioLimpioManual(this.checked)">
+                            <span class="texto-check">El espacio ya parece limpio</span>
+                        </label>
+                        <p class="nota-check" id="nota-cromo-grupo"></p>
+
+                        <button id="btn-continuar-jornada" class="btn-continuar-titilante" style="display: none;" onclick="cerrarModalOficina()">
+                            Continuar la jornada →
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- =====================================================================
+         4. NOTIFICACIÓN TOAST DE NUEVO CROMO DESBLOQUEADO
+         ===================================================================== -->
+    <div id="toast-cromo" class="toast-cromo">
+        <div class="toast-icono" id="toast-img">★</div>
+        <div class="toast-info">
+            <span class="toast-etiqueta">¡NUEVO CROMO DE COBRO OBTENIDO!</span>
+            <strong id="toast-titulo">Cromo desbloqueado</strong>
+        </div>
+    </div>
+
+    <!-- =====================================================================
+         5. POP-UP DE REFLEXIÓN FINAL
+         ===================================================================== -->
+    <div id="modal-reflexion" class="modal-backdrop">
+        <div class="caja-reflexion-final">
+            <span class="etiqueta-expediente">TURNO COMPLETADO // 5 DE 5 CROMOS OBTENIDOS</span>
+            <h2 class="titulo-reflexion">OBSERVACIÓN FINAL DEL CUARTO DE ASEO</h2>
+            <div class="scroll-reflexion" id="texto-reflexion-final"></div>
+            <div class="acciones-reflexion">
+                <button class="btn-cta" onclick="irACreditos()">Regresar a casa</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- =====================================================================
+         6. PANTALLA DE CRÉDITOS FINALES (CON MÚSICA Y 3 BOTONES)
+         ===================================================================== -->
+    <section id="pantalla-creditos" style="display: none;">
+        <div class="caja-creditos">
+            <h2 class="titulo-creditos">Créditos</h2>
+            <div class="separador-creditos"></div>
+
+            <div class="scroll-creditos">
+                <p class="linea-credito">Experiencia y programación diseñados con soporte de Inteligencia Artificial</p>
+                <p class="linea-credito">Textos escritos con Inteligencia Humana</p>
+                <p class="linea-contacto">Contacto: <a href="mailto:agiraldoceron@gmail.com">agiraldoceron@gmail.com</a></p>
+
+                <div class="bloque-creditos-musica">
+                    <h3 class="subtitulo-creditos-musica">Música</h3>
+
+                    <div class="grupo-musica-credito">
+                        <h4>Tema inicial</h4>
+                        <p>Epsilon - Kangding Ray</p>
+                    </div>
+
+                    <div class="grupo-musica-credito">
+                        <h4>Piso 1</h4>
+                        <p>Instantané – Paradis</p>
+                        <p>Les mots bleus - Johan Papaconstantino</p>
+                        <p>Universalis - Bleu Toucan</p>
+                    </div>
+
+                    <div class="grupo-musica-credito">
+                        <h4>Piso 2</h4>
+                        <p>Chacun Pour Soi – Paradis</p>
+                        <p>La ritournelle (Gilligan Moss Mix) - Sébastien Tellier</p>
+                        <p>Shuggie - Foxygen</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="acciones-creditos">
+                <button class="btn-cta" onclick="compartirExperiencia()">Compartir experiencia</button>
+                <button class="btn-secundario" onclick="volverAlPlanoDesdeCreditos()">Volver al plano</button>
+                <button class="btn-secundario" onclick="volverAlInicioDesdeCreditos()">Volver al inicio</button>
+            </div>
+            <p id="mensaje-copiado" class="confirmacion-copiado">
+                ✓ El enlace de la experiencia ha sido copiado en el portapapeles.
+            </p>
+        </div>
+    </section>
+
+    <script src="script.js"></script>
+</body>
+</html>
